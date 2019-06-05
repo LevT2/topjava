@@ -51,12 +51,13 @@ public class UserMealsUtil {
 
     public static List<UserMealWithExceed> getFilteredWithExceededStream(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         Map<LocalDate, Integer> dailyCalories = new HashMap<>();
-
-        mealList.forEach((meal) -> {
-                    LocalDate localDate = meal.getDateTime().toLocalDate();
-                    dailyCalories.merge(localDate, meal.getCalories(), Integer::sum);
-                }
-        );
+        mealList.stream().
+                collect(Collectors.groupingBy(
+                        (meal) -> meal.getDateTime().toLocalDate())
+                )
+                .forEach((localDate,userMeals)-> userMeals.forEach(meal -> {
+                    dailyCalories.merge(meal.getDateTime().toLocalDate(), meal.getCalories(), Integer::sum);
+                }));
 
         List<UserMealWithExceed> list = mealList.stream().
                 filter((meal) -> {
