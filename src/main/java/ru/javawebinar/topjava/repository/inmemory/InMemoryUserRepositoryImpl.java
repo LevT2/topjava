@@ -6,10 +6,7 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -26,13 +23,13 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     @Override
     public boolean delete(int id) {
         log.info("delete {}", id);
-        if (repository.containsKey(id)) {
+
+        boolean checkSuccess = repository.remove(id, repository.get(id));
+        if (checkSuccess) {
             String email = repository.get(id).getEmail();
             indexEmail.remove(email);
-            repository.remove(id);
-            return true;
         }
-        return false;
+        return checkSuccess;
     }
 
     @Override
@@ -69,10 +66,9 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     @Override
     public User getByEmail(String email) {
         log.info("getByEmail {}", email);
-        if (indexEmail.containsKey(email)) {
-            int id = indexEmail.get(email);
-            return repository.get(id);
-        }
-        return null;
+        Optional<User> first = repository.values().stream().
+                filter(user -> user.getEmail() == email).
+                findFirst();
+        return first.orElse(null);
     }
 }
