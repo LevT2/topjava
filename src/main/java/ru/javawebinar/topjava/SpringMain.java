@@ -5,11 +5,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
 
 import java.util.Arrays;
-import java.util.Collection;
 
 public class SpringMain {
     public static void main(String[] args) {
@@ -19,10 +19,27 @@ public class SpringMain {
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
             adminUserController.create(new User(null, "userName", "email@mail.ru", "password", Role.ROLE_ADMIN));
 
-            MealRestController mealRestController = appCtx.getBean(MealRestController.class);
-            Collection<Meal> all = mealRestController.getAll(1);
-            all.forEach(meal -> System.out.println(meal.toString()));
+            MealRestController controller = appCtx.getBean(MealRestController.class);
+//            Collection<Meal> all = controller.getAll();
+//            all.forEach(SpringMain::printAll);
 
+//            controller.getAllTo().forEach(SpringMain::printAll);
+
+            MealsUtil.MEALS.forEach(meal -> {
+                Meal newMeal = new Meal(meal.getDateTime(), meal.getDescription(), meal.getCalories());
+                controller.create(newMeal);
+            });
+
+            MealsUtil.MEALS.forEach(meal -> {
+                Meal newMeal = new Meal(meal.getDateTime(), meal.getDescription() + "!!!", meal.getCalories());
+                controller.update(newMeal, meal.getId());
+            });
+
+            controller.getAllTo().forEach(SpringMain::printAll);
         }
+    }
+
+    private static <T> void printAll(T item) {
+        System.out.println(item.toString());
     }
 }

@@ -1,45 +1,83 @@
 package ru.javawebinar.topjava.web.meal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.web.SecurityUtil;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.List;
 
+import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
+import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
+
 @Controller
-public class MealRestController extends AbstractMealController{
+public class MealRestController {
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    public MealRestController (MealService service){
+    protected MealService service;
+
+    private int authUserId;
+    private int authUserCaloriesPerDay;
+
+    {
+        authUserId = SecurityUtil.authUserId();
+        authUserCaloriesPerDay = SecurityUtil.authUserCaloriesPerDay();
+    }
+
+    @Autowired
+    public MealRestController(MealService service) {
         this.service = service;
     }
 
-    @Override
-    public Collection<Meal> getAll(int userId) {
-        return super.getAll(userId);
+
+    public List<MealTo> getAllTo() {
+        Collection<Meal> mealCollection = service.getAll(authUserId);
+        return MealsUtil.getWithExcess(mealCollection, MealsUtil.DEFAULT_CALORIES_PER_DAY);
     }
 
-    @Override
-    public Meal get(int id, int userId) {
-        return super.get(id, userId);
+    public List<MealTo> getTo(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+        if (startDate == null) { startDate = LocalDate.MIN; }
+        if (endDate == null) { endDate = LocalDate.MAX; }
+        if (startTime == null) { startTime = LocalTime.MIN; }
+        if (endTime == null) { endTime = LocalTime.MAX; }
+
+        Collection<Meal> mealCollection = service.getAllBetweenDates(authUserId, startDate, endDate);
+        return MealsUtil.getFilteredWithExcess(mealCollection, authUserCaloriesPerDay, startTime, endTime);
     }
 
-    @Override
-    public Meal create(Meal meal, int userId) {
-        return super.create(meal, userId);
+    public Collection<Meal> getAll() {
+        log.info("getAll");
+        return service.getAll(authUserId);
     }
 
-    @Override
-    public void delete(int id, int userId) {
-        super.delete(id, userId);
+    public Meal get(int id) {
+        log.info("get {}", id);
+        return service.get(id, authUserId);
     }
 
-    @Override
-    public void update(Meal meal, int id, int userId) {
-        super.update(meal, id, userId);
+    public Meal create(Meal meal) {
+        log.info("create {}", meal);
+        checkNew(meal);
+        return service.create(meal, authUserId);
+    }
+
+    public void delete(int id) {
+        log.info("delete {}", id);
+        service.delete(id, authUserId);
+    }
+
+    public void update(Meal meal, int id) {
+        log.info("update {} with id={}", meal, id);
+        assureIdConsistent(meal, id);
+        service.update(meal, authUserId);
     }
 }

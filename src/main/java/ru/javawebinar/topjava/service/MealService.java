@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.time.LocalDate;
 import java.util.Collection;
 
 public interface MealService {
@@ -16,4 +17,6 @@ public interface MealService {
     void update(Meal meal, int userId);
 
     Collection<Meal> getAll(int userId);
+
+    Collection<Meal> getAllBetweenDates(int userId, LocalDate startTime, LocalDate endTime);
 }
