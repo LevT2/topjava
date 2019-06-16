@@ -18,31 +18,26 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     private Map<Integer, User> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
 
-    private Map<String, Integer> indexEmail = new HashMap<>();
+//    private Map<String, Integer> indexEmail = new HashMap<>();
 
     @Override
     public boolean delete(int id) {
         log.info("delete {}", id);
 
-        boolean checkSuccess = repository.remove(id, repository.get(id));
-        if (checkSuccess) {
-            String email = repository.get(id).getEmail();
-            indexEmail.remove(email);
-        }
-        return checkSuccess;
+        repository.values().stream().
+                filter(user -> user.getId() == id).
+                forEach(user -> repository.remove(id,user));
+
+        //TODO  Check here
+        return true;
     }
 
     @Override
     public User save(User user) {
         log.info("save {}", user);
         if (user.isNew()) {
-            if (indexEmail.get(user.getEmail()) != null) {
-                log.error("email is already used {}", user.getEmail());
-                return null;
-            }
             user.setId(counter.incrementAndGet());
             repository.put(user.getId(), user);
-            indexEmail.put(user.getEmail(), user.getId());
             return user;
         }
         // treat case: update, but absent in storage
@@ -59,7 +54,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     public List<User> getAll() {
         log.info("getAll");
         return repository.values().stream().
-                sorted(Comparator.comparing(User::getEmail)).
+                sorted(Comparator.comparing(User::getName).thenComparing(User::getId)).
                 collect(Collectors.toList());
     }
 
@@ -67,7 +62,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     public User getByEmail(String email) {
         log.info("getByEmail {}", email);
         Optional<User> first = repository.values().stream().
-                filter(user -> user.getEmail() == email).
+                filter(user -> user.getEmail().equals(email)).
                 findFirst();
         return first.orElse(null);
     }

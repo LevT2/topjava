@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.repository.inmemory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
@@ -12,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+@Repository
 public class InMemoryMealRepositoryImpl implements MealRepository {
     private static final Logger LOG = LoggerFactory.getLogger(InMemoryMealRepositoryImpl.class);
 
@@ -29,7 +31,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal save(Meal meal, int userId) {
-        List<Integer> currentUserMeals = userMeals.get(userId);
+        List<Integer> currentUserMeals = getCurrentUserMeals(userId);
 
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
@@ -48,11 +50,16 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        List<Integer> currentUserMeals = userMeals.get(userId);
+        List<Integer> currentUserMeals = getCurrentUserMeals(userId);
+        LOG.info("int: " + id);
+        LOG.info("currentUserMeals: " + currentUserMeals.toString());
 
-        if (currentUserMeals.contains(id)) {
-            return repository.remove(id) != null;
+        Integer remove = currentUserMeals.remove(id);
+        if (remove != null ) {
+            currentUserMeals.remove(remove);
+            return true;
         } else {
+            //TODO при логгировании не должно быть доп обращения к БД
             LOG.error("Attempt to delete meal of someone else, id:{}, {}", id, repository.get(id).toString());
             return false;
         }
@@ -60,7 +67,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        List<Integer> currentUserMeals = userMeals.get(userId);
+        List<Integer> currentUserMeals = getCurrentUserMeals(userId);
         if (currentUserMeals.contains(id)) {
             return repository.get(id);
         } else {
@@ -71,12 +78,18 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public Collection<Meal> getAll(int userId) {
-        List<Integer> currentUserMeals = userMeals.get(userId);
+        List<Integer> currentUserMeals = getCurrentUserMeals(userId);
         return repository.values().stream().
                 filter(meal -> currentUserMeals.contains(meal.getId())).
                 sorted(Comparator.comparing(Meal::getDate).
                         reversed()).
                 collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private List<Integer> getCurrentUserMeals(int userId) {
+        List<Integer> currentUserMeals = userMeals.get(userId);
+        if (currentUserMeals == null) currentUserMeals = new ArrayList<>();
+        return currentUserMeals;
     }
 }
 
