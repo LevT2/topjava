@@ -23,10 +23,17 @@
     <h2>Meals</h2>
     <a href="meals?action=create">Add Meal</a>
     <br><br>
-    <div class="date-picker"></div>
-    <div class="date-picker"></div>
-    <div class="date-picker"></div>
-    <div class="date-picker"></div>
+    <div>
+        <h3>Filter</h3>
+        <form method="get">
+            <input type="hidden" name="action" value="doFilter">
+            <input type="date" name="startDate" value="${startDate}">
+            <input type="date" name="endDate" value="${endDate}">
+            <input type="time" name="startTime">
+            <input type="time" name="endTime">
+            <input type="submit" value="Filter">
+        </form>
+    </div>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
         <tr>

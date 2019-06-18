@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
@@ -14,9 +16,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class MealServlet extends HttpServlet {
@@ -66,6 +72,8 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
+        log.info("!!!" + action);
+
         switch (action == null ? "all" : action) {
             case "delete":
                 int id = getId(request);
@@ -81,6 +89,17 @@ public class MealServlet extends HttpServlet {
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
+            case "doFilter":
+                LocalDate startDate = getDate(request, "startDate");
+                LocalDate endDate = getDate(request, "endDate");
+                List<MealTo> meals = controller.getTo(startDate, endDate);
+
+                request.setAttribute("startDate", startDate);
+                request.setAttribute("endDate", endDate);
+
+                request.setAttribute("meals", meals);
+                request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                break;
             case "all":
             default:
                 log.info("getAllTo");
@@ -93,5 +112,27 @@ public class MealServlet extends HttpServlet {
     private int getId(HttpServletRequest request) {
         String paramId = Objects.requireNonNull(request.getParameter("id"));
         return Integer.parseInt(paramId);
+    }
+
+    private LocalDate getDate (HttpServletRequest request, String param) {
+        String paramId = Objects.requireNonNull(request.getParameter(param));
+        LocalDate date;
+        try {
+            date = LocalDate.parse(paramId);
+        } catch (DateTimeParseException ex) {
+            date = null;
+        }
+        return date;
+    }
+
+    private LocalTime getTime (HttpServletRequest request, String param) {
+        String paramId = Objects.requireNonNull(request.getParameter(param));
+        LocalTime time;
+        try {
+            time = LocalTime.parse(paramId);
+        } catch (DateTimeParseException ex) {
+            time = null;
+        }
+        return time;
     }
 }
