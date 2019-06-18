@@ -37,14 +37,14 @@ public class MealRestController {
         return MealsUtil.getWithExcess(mealCollection, MealsUtil.DEFAULT_CALORIES_PER_DAY);
     }
 
-
-    public List<MealTo> getTo(LocalDate startDate, LocalDate endDate) {
-        return getTo(startDate, endDate, null, null);
-    }
-
-    public List<MealTo> getTo(LocalTime startTime, LocalTime endTime) {
-        return getTo(null, null, startTime, endTime);
-    }
+//
+//    public List<MealTo> getTo(LocalDate startDate, LocalDate endDate) {
+//        return getTo(startDate, endDate, null, null);
+//    }
+//
+//    public List<MealTo> getTo(LocalTime startTime, LocalTime endTime) {
+//        return getTo(null, null, startTime, endTime);
+//    }
 
     public List<MealTo> getTo(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
         log.info("getTo");

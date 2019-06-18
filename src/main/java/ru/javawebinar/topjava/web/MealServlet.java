@@ -92,10 +92,11 @@ public class MealServlet extends HttpServlet {
             case "doFilter":
                 LocalDate startDate = getDate(request, "startDate");
                 LocalDate endDate = getDate(request, "endDate");
-                List<MealTo> meals = controller.getTo(startDate, endDate);
+                LocalTime startTime = getTime(request, "startTime");
+                LocalTime endTime = getTime(request, "endTime");
 
-                request.setAttribute("startDate", startDate);
-                request.setAttribute("endDate", endDate);
+                List<MealTo> meals = controller.getTo(startDate, endDate, startTime, endTime);
+
 
                 request.setAttribute("meals", meals);
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
@@ -114,7 +115,7 @@ public class MealServlet extends HttpServlet {
         return Integer.parseInt(paramId);
     }
 
-    private LocalDate getDate (HttpServletRequest request, String param) {
+    private LocalDate getDate(HttpServletRequest request, String param) {
         String paramId = Objects.requireNonNull(request.getParameter(param));
         LocalDate date;
         try {
@@ -125,7 +126,7 @@ public class MealServlet extends HttpServlet {
         return date;
     }
 
-    private LocalTime getTime (HttpServletRequest request, String param) {
+    private LocalTime getTime(HttpServletRequest request, String param) {
         String paramId = Objects.requireNonNull(request.getParameter(param));
         LocalTime time;
         try {

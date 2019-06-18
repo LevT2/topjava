@@ -64,15 +64,15 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public Collection<Meal> getAll(int userId) {
-        return getAllBetween(userId, meal -> true);
+        return getAllWhere(userId, meal -> true);
     }
 
     @Override
     public Collection<Meal> getAllBetween(LocalDate startTime, LocalDate endTime, int userId) {
-        return getAllBetween(userId, meal -> DateTimeUtil.isBetween(meal.getDate(), startTime, endTime));
+        return getAllWhere(userId, meal -> DateTimeUtil.isBetween(meal.getDate(), startTime, endTime));
     }
 
-    private Collection<Meal> getAllBetween (int userId, Predicate<Meal> filter) {
+    private Collection<Meal> getAllWhere(int userId, Predicate<Meal> filter) {
         return repo.getOrDefault(userId, new ConcurrentHashMap<>()).values().stream().
                 filter(filter).
                 sorted(Comparator.comparing(Meal::getDate).

@@ -10,7 +10,6 @@ import ru.javawebinar.topjava.web.meal.MealRestController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
 
 import java.util.Arrays;
-import java.util.Collection;
 
 public class SpringMain {
     public static void main(String[] args) {

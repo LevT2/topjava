@@ -27,10 +27,10 @@
         <h3>Filter</h3>
         <form method="get">
             <input type="hidden" name="action" value="doFilter">
-            <input type="date" name="startDate" value="${startDate}">
-            <input type="date" name="endDate" value="${endDate}">
-            <input type="time" name="startTime">
-            <input type="time" name="endTime">
+            <input type="date" name="startDate" value="${param.startDate}">
+            <input type="date" name="endDate" value="${param.endDate}">
+            <input type="time" name="startTime" value="${param.startTime}">
+            <input type="time" name="endTime" value="${param.endTime}">
             <input type="submit" value="Filter">
         </form>
     </div>
