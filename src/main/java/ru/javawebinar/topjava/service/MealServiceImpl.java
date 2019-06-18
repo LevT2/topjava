@@ -48,7 +48,7 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public Collection<Meal> getAllBetweenDates(int userId, LocalDate startTime, LocalDate endTime) {
-        return repository.getAllBetween(startTime, endTime, userId);
+    public Collection<Meal> getAllBetweenDates(int userId, LocalDate startDate, LocalDate endDate) {
+        return repository.getAllBetween(startDate, endDate, userId);
     }
 }

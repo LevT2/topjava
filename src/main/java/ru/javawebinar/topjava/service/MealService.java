@@ -18,5 +18,5 @@ public interface MealService {
 
     Collection<Meal> getAll(int userId);
 
-    Collection<Meal> getAllBetweenDates(int userId, LocalDate startTime, LocalDate endTime);
+    Collection<Meal> getAllBetweenDates(int userId, LocalDate startDate, LocalDate endDate);
 }

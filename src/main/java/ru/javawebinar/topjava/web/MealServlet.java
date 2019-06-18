@@ -25,25 +25,24 @@ public class MealServlet extends HttpServlet {
     private ConfigurableApplicationContext appCtx;
     private MealRestController controller;
 
-
-    @Override
-    public void destroy() {
-        appCtx.close();
-        super.destroy();
-    }
-
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
 
-        System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
+        log.info("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
 
         controller = appCtx.getBean(MealRestController.class);
         MealsUtil.MEALS.forEach(meal -> {
-            Meal newMeal = new Meal(meal.getDateTime(), "!!!" + meal.getDescription(), meal.getCalories());
+            Meal newMeal = new Meal(meal.getDateTime(), meal.getDescription(), meal.getCalories());
             controller.create(newMeal);
         });
+    }
+
+    @Override
+    public void destroy() {
+        appCtx.close();
+        super.destroy();
     }
 
     @Override
@@ -57,11 +56,9 @@ public class MealServlet extends HttpServlet {
                 Integer.parseInt(request.getParameter("calories")));
 
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-        if (meal.isNew()) {
-            controller.create(meal);
-        } else {
-            controller.update(meal, meal.getId());   //???
-        }
+        if (meal.isNew()) controller.create(meal);
+        else controller.update(meal, meal.getId());
+
         response.sendRedirect("meals");
     }
 
@@ -86,9 +83,8 @@ public class MealServlet extends HttpServlet {
                 break;
             case "all":
             default:
-                log.info("getAll");
-                request.setAttribute("meals",
-                        MealsUtil.getWithExcess(controller.getAll(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                log.info("getAllTo");
+                request.setAttribute("meals", controller.getAllTo());
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }

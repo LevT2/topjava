@@ -27,12 +27,8 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     public boolean delete(int id) {
         log.info("delete {}", id);
 
-        repository.values().stream().
-                filter(user -> user.getId() == id).
-                forEach(user -> repository.remove(id, user));
-
-        //TODO  Check here
-        return true;
+        User delete = repository.remove(id);
+        return delete != null;
     }
 
     @Override
