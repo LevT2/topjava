@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -33,6 +34,11 @@ public class UserServiceTest {
         SLF4JBridgeHandler.install();
     }
 
+    @AfterClass
+    public static void bridge() {
+        SLF4JBridgeHandler.uninstall();
+    }
+
     @Autowired
     private UserService service;
 
@@ -45,7 +51,7 @@ public class UserServiceTest {
     }
 
     @Test(expected = DataAccessException.class)
-    public void duplicateMailCreate() throws Exception {
+    public void duplicateMealCreate() throws Exception {
         service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER));
     }
 

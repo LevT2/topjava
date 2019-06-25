@@ -57,7 +57,7 @@ public class JdbcMealRepository implements MealRepository {
     private int getUpdate(MapSqlParameterSource map) {
         return namedParameterJdbcTemplate.update(
                 "UPDATE meals SET datetime=:datetime, calories=:calories, description=:description " +
-                        "WHERE id=:id", map);
+                        "WHERE id=:id AND user_id=:user_id", map);
     }
 
 
@@ -80,7 +80,7 @@ public class JdbcMealRepository implements MealRepository {
     @Override
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
         List<Meal> query = jdbcTemplate.query("SELECT * FROM meals WHERE user_id=? " +
-                "AND (datetime >= ?) AND (datetime < ?) " +
+                "AND datetime BETWEEN ? and ? " +
                 "ORDER BY datetime DESC", ROW_MAPPER, userId, startDate, endDate);
         return query;
     }
