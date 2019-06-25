@@ -1,21 +1,22 @@
 package ru.javawebinar.topjava;
 
+import ru.javawebinar.topjava.model.User;
+
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserTestUtil {
 
-    public static <T> void assertMatch(T actual, T expected) {
+    public static void assertMatch(User actual, User expected) {
         assertThat(actual).isEqualToIgnoringGivenFields(expected, "registered", "roles");
     }
 
-    public static <T> void assertMatch(Iterable<T> actual, T... expected) {
+    public static void assertMatch(Iterable<User> actual, User... expected) {
         assertMatch(actual, Arrays.asList(expected));
     }
 
-    public static <T> void assertMatch(Iterable<T> actual, Iterable<T> expected) {
+    public static void assertMatch(Iterable<User> actual, Iterable<User> expected) {
         assertThat(actual).usingElementComparatorIgnoringFields("registered", "roles").isEqualTo(expected);
     }
-
 }
