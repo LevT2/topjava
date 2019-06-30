@@ -31,7 +31,6 @@ public class MealServiceTest extends ServiceTest{
     public void createDuplicate() {
         Meal newMeal = new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000);
         service.create(newMeal, USER_ID);
-        assertMatch(service.getAll(USER_ID), TestData.MEAL7, newMeal, TestData.MEAL6, TestData.MEAL5, TestData.MEAL4, TestData.MEAL3, TestData.MEAL2);
     }
 
     @Test

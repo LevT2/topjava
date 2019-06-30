@@ -8,7 +8,7 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @ContextConfiguration({
-        "classpath:spring/spring-test-db.xml",
+        "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
 })
 @RunWith(SpringRunner.class)

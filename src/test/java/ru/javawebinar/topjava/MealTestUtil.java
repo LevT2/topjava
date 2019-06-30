@@ -6,11 +6,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MealTestUtil {
 
-    public static <T> void assertMatch(Iterable<T> actual, T... expected) {
+    public static <Meal> void assertMatch(Iterable<Meal> actual, Meal... expected) {
         assertMatch(actual, Arrays.asList(expected));
     }
 
-    public static <T> void assertMatch(Iterable<T> actual, Iterable<T> expected) {
+    public static <Meal> void assertMatch(Iterable<Meal> actual, Iterable<Meal> expected) {
         assertThat(actual).as("List Assert - equals").containsSequence(expected);
     }
 }

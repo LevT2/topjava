@@ -19,7 +19,7 @@ VALUES ('ROLE_USER', 100000),
 --        (100001, 'Обед', 900, '2015-06-30 12:00:00'),
 --        (100001, 'Ужин', 75, '2015-06-30 18:00:00');
 
-INSERT INTO meals (user_id, description, calories, datetime)
+INSERT INTO meals (user_id, description, calories, date_time)
 -- VALUES (100000, 'Завтрак', 500, '2015-05-30 10:00:00'),
 --        (100000, 'Обед', 1000, '2015-05-30 13:00:00'),
 --        (100000, 'Ужин', 500, '2015-05-30 20:00:00'),
