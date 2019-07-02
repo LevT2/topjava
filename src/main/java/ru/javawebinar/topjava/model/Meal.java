@@ -25,20 +25,21 @@ public class Meal extends AbstractBaseEntity {
     public static final String ALL_BETWEEN_SORTED = "Meal.getAllBetweenSorted";
 
     @Column(name = "date_time", nullable = false)
+    @NotNull
     private LocalDateTime dateTime;
 
-    @Column(name = "description")
+    @Column(nullable = false)
     @NotBlank
     private String description;
 
     @Column(nullable = false, columnDefinition = "integer")
-    @NotNull
     @Min(10)
-    @Max(2000)
+    @Max(5000)
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
+    @NotNull
     private User user;
 
     public Meal() {

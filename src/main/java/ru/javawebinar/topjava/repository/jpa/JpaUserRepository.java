@@ -57,11 +57,6 @@ public class JpaUserRepository implements UserRepository {
                 .executeUpdate() != 0;
     }
 
-//    @Override
-//    public boolean delete(int id) {
-//        return false;
-//    }
-
     @Override
     public User getByEmail(String email) {
         List<User> users = em.createNamedQuery(User.BY_EMAIL, User.class)

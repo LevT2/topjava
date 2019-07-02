@@ -40,19 +40,15 @@ public class MealServiceTest {
         assertMatch(service.getAll(USER_ID), MEAL6, MEAL5, MEAL4, MEAL3, MEAL2);
     }
 
-    @Test //(expected = NotFoundException.class)
+    @Test
     public void deleteNotFound() throws Exception {
-        thrown.expect(NullPointerException.class);
-        thrown.expectMessage("Not found entity with id=" + 1);
-//        thrown.expectMessage(startsWith("What"));
+        checkThrownNfe(1);
         service.delete(1, USER_ID);
     }
 
-    @Test //(expected = NotFoundException.class)
+    @Test
     public void deleteNotOwn() throws Exception {
-        thrown.expect(NullPointerException.class);
-        thrown.expectMessage("happened?");
-        thrown.expectMessage(startsWith("What"));
+        checkThrownNfe(MEAL1_ID);
         service.delete(MEAL1_ID, ADMIN_ID);
     }
 
@@ -71,16 +67,15 @@ public class MealServiceTest {
         assertMatch(actual, ADMIN_MEAL1);
     }
 
-    @Test //(expected = NotFoundException.class)
+    @Test
     public void getNotFound() throws Exception {
-        thrown.expect(NullPointerException.class);
-        thrown.expectMessage("happened?");
-        thrown.expectMessage(startsWith("What"));
+        checkThrownNfe(1);
         service.get(1, USER_ID);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void getNotOwn() throws Exception {
+        checkThrownNfe(MEAL1_ID);
         service.get(MEAL1_ID, ADMIN_ID);
     }
 
@@ -91,11 +86,9 @@ public class MealServiceTest {
         assertMatch(service.get(MEAL1_ID, USER_ID), updated);
     }
 
-    @Test //(expected = NotFoundException.class)
+    @Test
     public void updateNotFound() throws Exception {
-        thrown.expect(NullPointerException.class);
-        thrown.expectMessage("happened?");
-        thrown.expectMessage(startsWith("What"));
+        checkThrownNfe(MEAL1_ID);
         service.update(MEAL1, ADMIN_ID);
     }
 
@@ -109,5 +102,11 @@ public class MealServiceTest {
         assertMatch(service.getBetweenDates(
                 LocalDate.of(2015, Month.MAY, 30),
                 LocalDate.of(2015, Month.MAY, 30), USER_ID), MEAL3, MEAL2, MEAL1);
+    }
+
+    private void checkThrownNfe(int meal1Id) {
+        thrown.expect(NotFoundException.class);
+        thrown.expectMessage(String.valueOf(meal1Id));
+        thrown.expectMessage(startsWith("Not found entity with id="));
     }
 }
