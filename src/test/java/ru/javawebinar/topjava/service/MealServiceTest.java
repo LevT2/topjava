@@ -4,6 +4,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.time.Month;
 
 import static org.hamcrest.CoreMatchers.startsWith;
+import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
@@ -27,6 +29,9 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
+
+    private static final Logger log = getLogger(MealServiceTest.class);
+    private static StringBuilder message = new StringBuilder(String.format("\n\u001B[34m%-20s %s", "Test", "Time"));
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -84,6 +89,15 @@ public class MealServiceTest {
         Meal updated = getUpdated();
         service.update(updated, USER_ID);
         assertMatch(service.get(MEAL1_ID, USER_ID), updated);
+    }
+
+    @Test
+    public void updateNotExistent() throws Exception {
+        Meal update = new Meal();
+        int bad = 555;
+        update.setId(bad);
+        checkThrownNfe(bad);
+        service.update(update, ADMIN_ID);
     }
 
     @Test
