@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class DataJpaMealRepository implements MealRepository {
@@ -23,14 +24,28 @@ public class DataJpaMealRepository implements MealRepository {
     @Autowired
     private CrudUserRepository crudUserRepository;
 
+
     @Override
     public Meal save(Meal meal, int userId) {
-        if (!meal.isNew() && get(meal.getId(), userId) == null) {
+        Optional<Meal> mealSaved = crudRepository.findByIdAndUserId_InTransaction(meal.getId(), userId);
+        if (!meal.isNew() && mealSaved.isEmpty()) {
             return null;
         }
         meal.setUser(crudUserRepository.getOne(userId));
         return crudRepository.save(meal);
     }
+
+//    @Override
+//    public Meal save(Meal meal, int userId) {
+//        Optional<Meal> mealSaved = crudRepository.findByIdAndUserId(meal.getId(), userId);
+//        if (!meal.isNew() && mealSaved.isEmpty()) {
+//            return null;
+//        }
+//        meal.setUser(crudUserRepository.getOne(userId));
+//        return crudRepository.save(meal);
+//    }
+//
+
 
     @Override
     public boolean delete(int id, int userId) {

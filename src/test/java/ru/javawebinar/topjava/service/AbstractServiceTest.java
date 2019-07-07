@@ -26,7 +26,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 @ActiveProfiles(resolver = ActiveDbProfileResolver.class)
 //@ActiveProfiles({Profiles.DATAJPA, Profiles.HSQL_DB})
-public abstract class ServiceTest {
+public abstract class AbstractServiceTest {
     private static final Logger log = getLogger("result");
 
     private static StringBuilder results = new StringBuilder();
@@ -52,5 +52,6 @@ public abstract class ServiceTest {
                 "\n---------------------------------" +
                 results +
                 "\n---------------------------------");
+        results.setLength(0);
     }
 }

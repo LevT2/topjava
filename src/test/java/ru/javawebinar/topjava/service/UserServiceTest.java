@@ -18,7 +18,7 @@ import java.util.List;
 import static ru.javawebinar.topjava.UserTestData.*;
 
 @ActiveProfiles(Profiles.DATAJPA)
-public class UserServiceTest extends ServiceTest {
+public class UserServiceTest extends AbstractServiceTest {
 
     @Autowired
     private UserService service;
