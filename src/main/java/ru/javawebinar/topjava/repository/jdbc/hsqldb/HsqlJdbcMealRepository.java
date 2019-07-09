@@ -9,20 +9,22 @@ import ru.javawebinar.topjava.Profiles;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.repository.jdbc.AbstractJdbcMealRepository;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Repository
 @Profile(Profiles.HSQL_DB)
-public class HsqlJdbcMealRepository extends AbstractJdbcMealRepository implements MealRepository {
+public class HsqlJdbcMealRepository extends AbstractJdbcMealRepository  {
 
     @Autowired
     public HsqlJdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         super(jdbcTemplate, namedParameterJdbcTemplate);
     }
 
+    // faulty implementation
     @Override
     protected LocalDateTime convertLocalDateTime(LocalDateTime dateTime) {
-        return dateTime;
+        return Timestamp.valueOf(dateTime).toLocalDateTime();
     }
 
 }

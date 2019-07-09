@@ -18,7 +18,7 @@ import java.util.List;
 
 @Repository
 @Profile(Profiles.POSTGRES_DB)
-public class PsqlJdbcMealRepository extends AbstractJdbcMealRepository implements MealRepository {
+public class PsqlJdbcMealRepository extends AbstractJdbcMealRepository {
 
 
     @Autowired
