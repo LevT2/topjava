@@ -8,8 +8,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.User;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.SqlResultSetMapping;
+
 @Transactional(readOnly = true)
 public interface CrudUserRepository extends JpaRepository<User, Integer> {
+
     @Transactional
     @Modifying
 //    @Query(name = User.DELETE)
@@ -17,10 +22,10 @@ public interface CrudUserRepository extends JpaRepository<User, Integer> {
     int delete(@Param("id") int id);
 
 
-    @Override
-    @Transactional
-    @Modifying
-    User save(User user);
+//    @Override
+//    @Transactional
+//    @Modifying
+//    User save(User user);
 
 
     User getByEmail(String email);
@@ -28,4 +33,5 @@ public interface CrudUserRepository extends JpaRepository<User, Integer> {
     @EntityGraph(attributePaths = {"meals"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT u FROM User u WHERE u.id=:id")
     User getWithMeals(@Param("id") int id);
+
 }

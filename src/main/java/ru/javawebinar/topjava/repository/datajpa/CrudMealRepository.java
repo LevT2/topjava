@@ -15,10 +15,10 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
 
-    @Override
-    @Transactional
-    @Modifying
-    Meal save(Meal item);
+//    @Override
+//    @Transactional
+//    @Modifying
+//    Meal save(Meal item);
 
     @Transactional
     @Modifying
@@ -34,6 +34,6 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     @Query("SELECT m FROM Meal m WHERE m.user.id=:userId AND m.dateTime BETWEEN :startDate AND :endDate ORDER BY m.dateTime DESC")
     List<Meal> findBetween(@Param("userId") Integer userId, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
-    @Query("SELECT m FROM Meal m JOIN FETCH m.user WHERE m.id = :id and m.user.id = :userId")
-    Optional<Meal> findWithUser(@Param("id") Integer id, @Param("userId") Integer userId);
+    @Query("SELECT m FROM Meal m JOIN FETCH m.user WHERE m.id = :id") // and m.user.id = :userId")
+    Optional<Meal> findWithUser(@Param("id") Integer id); //, @Param("userId") Integer userId);
 }

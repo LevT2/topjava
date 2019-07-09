@@ -1,11 +1,14 @@
 package ru.javawebinar.topjava.repository.datajpa;
 
+import org.hibernate.transform.ResultTransformer;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.to.MealTo;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -58,7 +61,14 @@ public class DataJpaMealRepository implements MealRepository {
         return crudRepository.findBetween(userId, startDate, endDate);
     }
 
-    public Meal getWithUser(int id, int userId) {
-        return crudRepository.findWithUser(id, userId).orElse(null);
+    @Override
+    public Meal getWithUser(int id) {
+        return crudRepository.findWithUser(id).orElse(null);
     }
+
+//    public Meal getWithUser(int id, int userId) {
+//        return crudRepository.findWithUser(id, userId).orElse(null);
+//    }
+
+
 }

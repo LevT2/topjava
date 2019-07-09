@@ -26,9 +26,13 @@ public class User extends AbstractNamedEntity {
     public static final String ALL_SORTED = "User.getAllSorted";
 
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-//    @OrderBy("dateTime DESC")
-//    protected List<Meal> meals;
+    public List<Meal> getMeals() {
+        return meals;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OrderBy("dateTime DESC")
+    protected List<Meal> meals;
 
     @Column(name = "email", nullable = false, unique = true)
     @Email

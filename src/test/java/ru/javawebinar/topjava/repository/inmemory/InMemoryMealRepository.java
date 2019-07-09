@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Repository
 public class InMemoryMealRepository implements MealRepository {
@@ -61,6 +62,15 @@ public class InMemoryMealRepository implements MealRepository {
         Objects.requireNonNull(startDateTime, "startDateTime must not be null");
         Objects.requireNonNull(endDateTime, "endDateTime must not be null");
         return getAllFiltered(userId, meal -> Util.isBetween(meal.getDateTime(), startDateTime, endDateTime));
+    }
+
+    @Override
+    public Meal getWithUser(int id) {
+        return usersMealsMap.entrySet().stream().
+                flatMap(e -> usersMealsMap.get(e).entryMap.values().stream()).
+                filter(e -> e.getUser().getId() == id).
+                findFirst().
+                orElse(null);
     }
 
     private List<Meal> getAllFiltered(int userId, Predicate<Meal> filter) {
