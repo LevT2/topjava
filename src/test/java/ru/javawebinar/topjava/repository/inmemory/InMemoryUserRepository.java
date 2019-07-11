@@ -39,10 +39,10 @@ public class InMemoryUserRepository extends InMemoryBaseRepository<User> impleme
                 .orElse(null);
     }
 
-    @Override
-    public User getWithMeals(int userId) throws UnsupportedOperationException {
-        return getCollection().stream().
-                filter(u -> u.getId() == userId).
-                findFirst().orElse(null);
-    }
+//    @Override
+//    public User getWithMeals(int userId) throws UnsupportedOperationException {
+//        return getCollection().stream().
+//                filter(u -> u.getId() == userId).
+//                findFirst().orElse(null);
+//    }
 }

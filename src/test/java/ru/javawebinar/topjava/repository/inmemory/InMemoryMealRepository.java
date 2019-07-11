@@ -64,14 +64,14 @@ public class InMemoryMealRepository implements MealRepository {
         return getAllFiltered(userId, meal -> Util.isBetween(meal.getDateTime(), startDateTime, endDateTime));
     }
 
-    @Override
-    public Meal getWithUser(int id) {
-        return usersMealsMap.entrySet().stream().
-                flatMap(e -> usersMealsMap.get(e).entryMap.values().stream()).
-                filter(e -> e.getUser().getId() == id).
-                findFirst().
-                orElse(null);
-    }
+//    @Override
+//    public Meal getWithUser(int id) {
+//        return usersMealsMap.entrySet().stream().
+//                flatMap(e -> usersMealsMap.get(e).entryMap.values().stream()).
+//                filter(e -> e.getUser().getId() == id).
+//                findFirst().
+//                orElse(null);
+//    }
 
     private List<Meal> getAllFiltered(int userId, Predicate<Meal> filter) {
         var meals = usersMealsMap.get(userId);

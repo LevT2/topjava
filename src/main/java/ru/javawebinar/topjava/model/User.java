@@ -83,8 +83,24 @@ public class User extends AbstractNamedEntity {
         setRoles(roles);
     }
 
+    public Date getRegistered() {
+        return registered;
+    }
+
+    public int getCaloriesPerDay() {
+        return caloriesPerDay;
+    }
+
     public String getEmail() {
         return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
     }
 
     public void setEmail(String email) {
@@ -95,10 +111,6 @@ public class User extends AbstractNamedEntity {
         this.password = password;
     }
 
-    public Date getRegistered() {
-        return registered;
-    }
-
     public void setRegistered(Date registered) {
         this.registered = registered;
     }
@@ -107,24 +119,12 @@ public class User extends AbstractNamedEntity {
         this.enabled = enabled;
     }
 
-    public int getCaloriesPerDay() {
-        return caloriesPerDay;
-    }
-
     public void setCaloriesPerDay(int caloriesPerDay) {
         this.caloriesPerDay = caloriesPerDay;
     }
 
     public boolean isEnabled() {
         return enabled;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setRoles(Collection<Role> roles) {
