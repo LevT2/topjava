@@ -1,18 +1,22 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.ExternalResource;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.ActiveDbProfileResolver;
+import ru.javawebinar.topjava.Profiles;
 import ru.javawebinar.topjava.TimingRules;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -44,4 +48,27 @@ abstract public class AbstractServiceTest {
             Assert.assertThat(getRootCause(e), instanceOf(exceptionClass));
         }
     }
+
+    @Autowired(required = false)
+    private Environment environment;
+
+    protected void assumeNotJdbc() {
+        String[] activeProfiles = environment.getActiveProfiles();
+        for (String activeProfile : activeProfiles) {
+            if (activeProfile.equals(Profiles.JDBC)) {
+                Assume.assumeTrue(false);
+            }
+        }
+    }
+
+    protected boolean isJdbc() {
+        String[] activeProfiles = environment.getActiveProfiles();
+        for (String activeProfile : activeProfiles) {
+            if (activeProfile.equals(Profiles.JDBC)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
