@@ -40,7 +40,7 @@
 
     <build>
         <finalName>topjava</finalName>
-        <defaultGoal>package</defaultGoal>
+        <defaultGoal>install</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -86,6 +86,19 @@
                         </dependencies>
                     </container>
                     <configuration>
+                        <!--                            https://stackoverflow.com/questions/36446085/local-debugging-application-launched-on-tomcat-with-cargo-in-intellij-->
+                        <type>standalone</type>
+<!--                        <properties>-->
+<!--                            <cargo.servlet.port>8080</cargo.servlet.port>-->
+<!--                            <cargo.jvmargs>-->
+<!--                                -Xmx2048m-->
+<!--                                -Xms512m-->
+<!--                                -Xdebug-->
+<!--                                -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=9009-->
+<!--                                -Xnoagent-->
+<!--                                -Djava.compiler=NONE-->
+<!--                            </cargo.jvmargs>-->
+<!--                        </properties>-->
                         <configfiles>
                             <configfile>
                                 <file>src/main/resources/tomcat/context.xml</file>
