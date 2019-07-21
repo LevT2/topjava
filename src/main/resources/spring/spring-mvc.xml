@@ -11,6 +11,7 @@
 
     <!--  all resources inside folder src/main/webapp/resources are mapped so they can be referred to inside JSP files -->
     <mvc:resources mapping="/resources/**" location="/resources/"/>
+<!--    <mvc:resources mapping="/resources/css/**" location="/resources/css"/>-->
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
           p:prefix="/WEB-INF/jsp/"
@@ -27,6 +28,8 @@
         </property>
     </bean>
 -->
+    <context:property-placeholder location="classpath:application.properties"/>
+
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
           p:cacheSeconds="5"
           p:defaultEncoding="UTF-8">
