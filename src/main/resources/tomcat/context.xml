@@ -49,6 +49,17 @@
               testOnBorrow="true"
               removeAbandonedOnBorrow="true"
               testWhileIdle="true"/>
+    <filter>
+        <filter-name>requestdumper</filter-name>
+        <filter-class>
+            org.apache.catalina.filters.RequestDumperFilter
+        </filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>requestdumper</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
     <!--
         username="wegxlfzjjgxaxy"
         password="SSQyKKE_e93kiUCR-ehzMcKCxZ"
